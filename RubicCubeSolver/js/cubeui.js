@@ -4,12 +4,12 @@
 **/
 function cubeUIClass() { 
     
-    var RED = 0;
-    var YELLOW = 1;
-    var GREEN = 2;
-    var WHITE = 3;
-    var BROWN = 4;
-    var BLUE = 5;
+    this.RED = 0;
+    this.YELLOW = 1;
+    this.GREEN = 2;
+    this.WHITE = 3;
+    this.BROWN = 4;
+    this.BLUE = 5;
 
     this.showSide = function (parentElementId, sideValues) {
         var i, j;
@@ -30,7 +30,7 @@ function cubeUIClass() {
                     newSidePart = "<div class='btn btn-default'></div>";
                     break;
                 case this.BROWN:
-                    newSidePart = "<div class='btn btn-default'></div>";
+                    newSidePart = "<div class='btn btn-default brown'></div>";
                     break;
                 case this.BLUE:
                     newSidePart = "<div class='btn btn-primary'></div>";
