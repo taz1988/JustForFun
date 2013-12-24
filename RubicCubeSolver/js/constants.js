@@ -1,0 +1,17 @@
+RED = 0;
+YELLOW = 1;
+GREEN = 2;
+WHITE = 3;
+BROWN = 4;
+BLUE = 5;
+TOP = 0;
+LEFT = 1;
+CENTER = 2;
+RIGHT = 3;
+BOTTOM = 4;
+UP = 0;
+DOWN = 1;
+LEFT = 2;
+RIGHT = 3;
+CHANGE_CUBE_EVENT = "changeCubeEvent";
+

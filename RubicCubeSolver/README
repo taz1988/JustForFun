@@ -1,0 +1,6 @@
+This is one of my fun project.
+
+My main goal is to create a javascript A* algorithm which is solve rubic cube.
+
+Furthermore I plan to create a djano application and a website for the stuff, where people
+run the algorithm and add custom heuristic functions.

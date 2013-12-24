@@ -6,3 +6,29 @@ body {
   width : 50px;
   height : 50px;
 }
+
+#left, #center, #right {
+    display: inline-block;
+}
+
+#top, #bottom {
+    margin-left: 200px;
+}
+
+div.brown {
+  background-color : #663300;
+  background-image: -webkit-gradient(linear,left 0,left 100%,from(#944D07),to(#663300));
+  background-image: -webkit-linear-gradient(top,#944D07 0,#663300 100%);
+  background-image: -moz-linear-gradient(top,#944D07 0,#663300 100%);
+  background-image: linear-gradient(to bottom,#944D07 0,#663300 100%);
+  border-color: #663300;
+}
+
+div.brown:active, div.brown:hover {
+  background-color : #663300;
+  border-color: #663300;
+  background-image: -webkit-gradient(linear,left 0,left 100%,from(#944D07),to(#663300));
+  background-image: -webkit-linear-gradient(top,#944D07 0,#663300 100%);
+  background-image: -moz-linear-gradient(top,#944D07 0,#663300 100%);
+  background-image: linear-gradient(to bottom,#944D07 0,#663300 100%);
+}
