@@ -1,5 +1,5 @@
 
-test("CreateCubeOneSide", function() {
+/*test("CreateCubeOneSide", function() {
     $("html").append("<div id='test2'></div>");
     var WIDTH = 100;
     var HEIGHT = 100;
@@ -178,4 +178,44 @@ test("controlElementTriggerEvent", function() {
     $("#0_0_0 :first").trigger("click");
     equal(callCustomEvent, true, "It should be call the custom event!");
     $("#0_0_0").remove();
+});**/
+
+test("SideUIClass.validateArray", function() {
+    var side = new SideUIClass(TOP, 200);
+    var notValid = "something";
+    throws(function() { 
+        side.validateArray(notValid); 
+    }, "the input should be a symetric matrix!");
+    notValid = [];
+    throws(function() { 
+        side.validateArray(notValid); 
+    }, "the input should be a symetric matrix!");
+    notValid = [[], []];
+    throws(function() { 
+        side.validateArray(notValid); 
+    }, "the input should be a symetric matrix!");
+});
+
+test("SquareUIClass.toHTML", function() {
+    var square = new SquareUIClass(RED, 0, 0, 200);
+    var testDiv = square.toHTML();
+    equal(testDiv.hasClass("btn-danger"), true, "It should be contain the given class!");
+    equal(testDiv.css("width"), "200px", "The width is not the expected!");
+    equal(testDiv.css("height"), "200px", "The height is not the expected!");
+    square = new SquareUIClass(WHITE, 0, 0, 300);
+    testDiv = square.toHTML();
+    equal(testDiv.hasClass("btn-default"), true, "It should be contain the given class!"); 
+    equal(testDiv.css("width"), "300px", "The width is not the expected!");
+    equal(testDiv.css("height"), "300px", "The height is not the expected!");
+});
+
+test("SquareUIClass.addColor", function() {
+    var square = new SquareUIClass(RED, 0, 0, 200);
+    var testDiv = $("<div></div>");
+    square.addColor(testDiv);
+    equal(testDiv.hasClass("btn-danger"), true, "It should be contain the given class!");
+    square = new SquareUIClass(WHITE, 0, 0, 200);
+    testDiv = $("<div></div>");
+    square.addColor(testDiv);
+    equal(testDiv.hasClass("btn-default"), true, "It should be contain the given class!"); 
 });
