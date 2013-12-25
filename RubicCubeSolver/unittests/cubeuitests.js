@@ -154,19 +154,19 @@ test("controlElementsDissapearMouseOutEvent", function() {
     side[2][2] = YELLOW;
     var cube = [side, side, side, side, side]; 
     cubeUI.showCube(cube);
-    $($($("#test").children()[0]).children()[0]).trigger("click");
-    equal($($($("#test").children()[0]).children()[0]).children().length, 4, "It should be 4 control elements!");
-    $($($("#test").children()[0]).children()[0]).mouseout(); 
-    equal($("#test").children().length, 0, "It should be 0 control elements!");
+    $($("#test :first").children()[0]).trigger("click");
+    equal($($("#test :first").children()[0]).children().length, 4, "It should be 4 control elements!");
+    $($("#test :first").children()[0]).mouseout(); 
+    equal($($("#test :first").children()[0]).children().length, 0, "It should be 0 control elements!");
     $("#test").remove();
 
 });
 
 test("controlElementTriggerEvent", function() {
-    $("html").append("<div id='test'></div>");
+    $("html").append("<div id='0_0_0'></div>");
     var cubeUI = new CubeUIClass();
-    CubeUIClass.showDirectionControl("test", TOP, 0, 0);
-    equal($("#test").children().length, 4);
+    CubeUIClass.showDirectionControl("0_0_0");
+    equal($("#0_0_0").children().length, 4);
     var callCustomEvent = false;
     $(document).on(CHANGE_CUBE_EVENT, function(event){
         callCustomEvent = true;
@@ -175,7 +175,7 @@ test("controlElementTriggerEvent", function() {
         equal(event.row, 0, "The row value shoud be 0!");
         equal(event.col, 0, "The col value should be 0!");
     }); 
-    $($("#test").children()[0]).trigger("click");
+    $("#0_0_0 :first").trigger("click");
     equal(callCustomEvent, true, "It should be call the custom event!");
-    $("#test").remove();
+    $("#0_0_0").remove();
 });

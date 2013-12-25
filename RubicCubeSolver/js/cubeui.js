@@ -36,16 +36,10 @@ function CubeUIClass(config) {
         var i, j;
         for (i = 0; i < sideValues.length; i++) {
            for (j = 0; j < sideValues[i].length; j++) {
-                var newSidePart = $("<div id='" + sideId + "_" + i + "_" +j +"' class='btn'></div>");
+                var newSidePart = $("<div id='" + sideId + "_" + i + "_" +j +"' onmouseout=\"CubeUIClass.removeDirectionControl('" + sideId + "_" + i + "_" +j +"')\" onclick=\"CubeUIClass.showDirectionControl('" + sideId + "_" + i + "_" +j +"');\" class='btn'></div>");
                 newSidePart.appendTo(parentElementId);
                 newSidePart.css("width", size + "px");
                 newSidePart.css("height", size + "px");
-                newSidePart.click(function() { 
-                    CubeUIClass.showDirectionControl(sideId + "_" + i + "_" + j, sideId, i, j);
-                });
-                newSidePart.mouseout(function() {
-                    CubeUIClass.removeDirectionControl();
-                });
                 switch (sideValues[i][j]) {
                 case RED:
                     newSidePart.addClass("btn-danger");
@@ -73,27 +67,28 @@ function CubeUIClass(config) {
     return this;
 }
 
-CubeUIClass.removeDirectionControl = function() {
-    console.log($(this));
-    $(this).html("");
+CubeUIClass.removeDirectionControl = function(parentId) {
+    $("#" + parentId).html("");
 }
 
-CubeUIClass.showDirectionControl = function(parentId, sideId, row, col) {
+CubeUIClass.showDirectionControl = function(parentId) {
     var parent = $("#" + parentId);
-    $("<span class='glyphicon glyphicon-chevron-up' onclick='CubeUIClass.sendCubeChangeEvent(" + UP + "," + sideId + "," + row + "," + col + ")'></span>").appendTo(parent);
-    $("<span class='glyphicon glyphicon-chevron-left' onclick='CubeUIClass.sendCubeChangeEvent(" + LEFT + "," + sideId + "," + row + "," + col + ")'></span>").appendTo(parent);
-    $("<span class='glyphicon glyphicon-chevron-rigth' onclick='CubeUIClass.sendCubeChangeEvent(" + RIGHT + "," + sideId + "," + row + "," + col + ")'></span>").appendTo(parent);
-    $("<span class='glyphicon glyphicon-chevron-down' onclick='CubeUIClass.sendCubeChangeEvent(" + DOWN + "," + sideId + "," + row + "," + col + ")'></span>").appendTo(parent);
+    $("<span class='glyphicon glyphicon-chevron-up' onclick='CubeUIClass.sendCubeChangeEvent(" + UP + ",\"" + parentId + "\")'></span>").appendTo(parent);
+    $("<span class='glyphicon glyphicon-chevron-left' onclick='CubeUIClass.sendCubeChangeEvent(" + LEFT + ",\"" + parentId + "\")'></span>").appendTo(parent);
+    $("<span class='glyphicon glyphicon-chevron-rigth' onclick='CubeUIClass.sendCubeChangeEvent(" + RIGHT + ",\"" + parentId + "\")'></span>").appendTo(parent);
+    $("<span class='glyphicon glyphicon-chevron-down' onclick='CubeUIClass.sendCubeChangeEvent(" + DOWN + ",\"" + parentId + "\")'></span>").appendTo(parent);
 }
 
-CubeUIClass.sendCubeChangeEvent = function(direction, sideId, row, col) {
-   $.event.trigger({
+CubeUIClass.sendCubeChangeEvent = function(direction, parentId) {
+    var data = parentId.split("_");
+    $.event.trigger({
         type : CHANGE_CUBE_EVENT,
         direction : direction,
-        sideId : sideId,
-        row : row,
-        col : col
-   }); 
+        sideId : data[0],
+        row : data[1],
+        col : data[2]
+   });
+   $("#"+parentId).html("");
 }
 
 
