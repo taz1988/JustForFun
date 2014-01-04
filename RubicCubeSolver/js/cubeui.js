@@ -81,10 +81,33 @@ function SideUIClass(id, size) {
         }
     }
 
+    this.createSquares = function(squareColors) {
+        var i, j;
+        var actualSize = Math.floor(this.size / squareColors.length);
+        var squares = [];
+        for (i = 0; i < squareColors.length; i++) {
+            squares[i] = [];
+            for (j = 0; j < squareColors[i].length; j++) {
+               squares[i][j] = new SquareUIClass(squareColors[i][j], i, j, actualSize);
+            }
+        }
+        return squares;
+    }
+
+    this.appendSquares = function(side, squares) {
+        var i,j;
+        for(i = 0; i < squares.length; i++) {
+            for(j = 0; j < squares[i].length; j++) {
+                side.append(squares[i][j].toHTML());
+            }
+        }
+    }
+
     this.toHTML = function(squareColors) {
         this.validateArray(squareColors);
-        var side = $('<div id="' + this.id + '"></div>');
-        
+        var side = $('<div id="' + this.id + '" style="width : ' + this.size + 'px; height : ' + this.size + 'px;"></div>');
+        squares = this.createSquares(squareColors);
+        this.appendSquares(side, squares);
         return side;
     } 
 

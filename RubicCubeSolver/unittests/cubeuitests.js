@@ -179,6 +179,40 @@ test("controlElementTriggerEvent", function() {
     equal(callCustomEvent, true, "It should be call the custom event!");
     $("#0_0_0").remove();
 });**/
+test("SideUIClass.toHTML", function() {
+    var side = new SideUIClass(TOP, 200);
+    var colors = [[], []];
+    colors[0][0] = RED;
+    colors[0][1] = RED;
+    colors[1][0] = WHITE;
+    colors[1][1] = WHITE;
+    var testDiv = side.toHTML(colors);
+    equal(testDiv.css("width"), "200px", "The width is not the expected!");
+    equal(testDiv.css("height"), "200px", "The height is not the expected!");
+    equal(testDiv.children().length, 4);
+});
+
+test("SideUIClass.createSquares", function() {
+    var side = new SideUIClass(TOP, 200);
+    var colors = [[], []];
+    colors[0][0] = RED;
+    colors[0][1] = RED;
+    colors[1][0] = WHITE;
+    colors[1][1] = WHITE;
+    var expectedSize = 100;
+    var squares = side.createSquares(colors);
+    equal(squares.length, 2);
+    equal(squares[0].length, 2);
+    equal(squares[1].length, 2);
+    equal(squares[0][0].size, expectedSize);
+    equal(squares[0][0].color, RED);
+    equal(squares[0][1].size, expectedSize);
+    equal(squares[0][1].color, RED);
+    equal(squares[1][0].size, expectedSize);
+    equal(squares[1][0].color, WHITE);
+    equal(squares[1][1].size, expectedSize);
+    equal(squares[1][1].color, WHITE);
+});
 
 test("SideUIClass.validateArray", function() {
     var side = new SideUIClass(TOP, 200);
