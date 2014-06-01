@@ -2,34 +2,56 @@
 
 this.removeTargetedItems = function(peons, gems, goldCoins, coins) {
 	for (var i = 0; i < peons.length; i++) {
-		if (typeof peons[i].targets != "undefined") {
-			for (var j = 0; j < peons[i].targets.length; i++) {
-				if (peons[i].targets[j].type == "gem") {
-					gems.splice(gems.indexOf(peons[i].targets[j]), 1);
-				} else if  (peons[i].targets[j].type == "gem") {
-					goldCoins.splice(goldCoins.indexOf(peons[i].targets[j]), 1);
+        var peonTarget = this.getPeonTargets(peons[i]);
+		if (peonTarget !== null) {
+			for (var j = 0; j < peonTarget.items.length; j++) {
+                var item = peonTarget.items[j];
+				if (item.type === "gem") {
+                    this.removeListOrTarget(gems, item, peonTarget.items);
+				} else if  (item.type === "gold-coin") {
+                    this.removeListOrTarget(goldCoins, item, peonTarget.items);
 				} else {
-					coins.splice(goldCoins.indexOf(coins[i].targets[j]), 1);
+                    this.removeListOrTarget(coins, item, peonTarget.items);
 				}
 			}
 		}
 	}	
 };
 
+this.removeListOrTarget = function(items, item, targets) {
+    var index = items.indexOf(item);
+    if (index < 0) {
+        targets.splice(targets.indexOf(item), 1);
+    } else {
+        items.splice(index, 1);
+    }
+};
+
 this.coordinatePeons = function(peons, gems, goldCoins, coins) {
 	for (var i = 0; i < peons.length; i++) {
-		if (typeof peons[i].targets !== "undefined" && peons[i].targets.length > 0) {
-			this.movePeonForwardTarget(peons[i]);
+        var peonTargets = this.getPeonTargets(peons[i]);
+		if (peonTargets != null && peonTargets.items.length > 0) {
+			this.movePeonForwardTarget(peons[i], peonTargets);
 		} else {
-			this.findBestTargetForPeon(peons[i], gems, goldCoins, coins);
-			this.movePeonForwardTarget(peons[i]);
+			peonTargets = this.findBestTargetForPeon(peons[i], gems, goldCoins, coins);
+			this.movePeonForwardTarget(peons[i], peonTargets);
 		} 
 	}	
 };
 
-this.movePeonForwardTarget = function(peon) {
-	if (typeof peon.targets !== "undefined") {
-		this.command(peon, 'move', peon.getNearest(peon.targets));
+this.getPeonTargets = function(peon) {
+    for (var i = 0; i < this.peonsTargets.length; i++) {
+        if (this.peonsTargets[i].id === peon.id) {
+            return this.peonsTargets;
+        }
+    }
+    return null;
+};
+
+this.movePeonForwardTarget = function(peon, peonTargets) {
+	if (typeof peonTargets.items.length > 0) {
+		this.command(peon, 'move', peon.getNearest(peonTargets.items));
+        this.say(peon.getNearest(peonTargets.items).pos);
 	}
 };
 
@@ -55,7 +77,12 @@ this.findBestTargetForPeon = function(peon, gems, goldCoins, coins) {
 					choosenElements = elementsBetweenPeonAndBiggestElement;
 				}
 			}
-		peon.targets = choosenElements;
+        var peonTarget = {
+            id : peon.id,
+            items : choosenElements     
+        };
+		this.peonsTargets.push(peonTarget);
+        return peonTarget;
 	}
 };
 
@@ -78,17 +105,17 @@ this.getElementsInDistance = function(peon, items, distance) {
 };
 
 this.getNearestBiggestElement = function(peon, gems, goldCoins, coins) {
-	var biggest = this.getNearest(peon, gems);
+	var biggest = this.getNearestForPeon(peon, gems);
 	if (biggest === null) {
-		biggest = this.getNearest(peon, goldCoins);
+		biggest = this.getNearestForPeon(peon, goldCoins);
 	}
 	if (biggest === null) {
-		biggest = this.getNearest(peon, coins);
+		biggest = this.getNearestForPeon(peon, coins);
 	}
 	return biggest;
 };
 
-this.getNearest = function(peon, items) {
+this.getNearestForPeon = function(peon, items) {
 	return peon.getNearest(items);
 };
 
@@ -103,6 +130,7 @@ var peons = base.getByType('peon');
 var gems = base.getByType('gems');
 var goldCoins = base.getByType('gold-coin');
 var coins = base.getByType('coin');
+this.peonsTargets = typeof this.peonsTargets == "undefined" ? [] : this.peonsTargets;
 
 this.removeTargetedItems(peons, gems, goldCoins, coins);
 this.coordinatePeons(peons, gems, goldCoins, coins);
