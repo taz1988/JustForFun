@@ -162,7 +162,7 @@ if (base.gold >= base.buildables[type].goldCost)
 // Click on a unit to see its API.
 var items = base.getItems();
 peons = base.getByType('peon');
-var gems = base.getByType('gems');
+var gems = base.getByType('gem');
 var goldCoins = base.getByType('gold-coin');
 var coins = base.getByType('coin');
 base.peonsTargets = typeof base.peonsTargets == "undefined" ? [] : base.peonsTargets;
