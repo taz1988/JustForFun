@@ -1,0 +1,6 @@
+var peonTargetFinder = {
+    
+    init : function(map) {
+    
+    }
+};
