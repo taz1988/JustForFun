@@ -1,150 +1,137 @@
+var base = this;
+var items = base.getItems();
+var peons = base.getByType("peon");
+var gems = base.getByType("gem");
+var goldCoins = base.getByType("gold-coin");
+var coins = base.getByType("coin");
+var usedItems = typeof base.usedItems === "undefined" ? [] : base.usedItems;
+var targets = typeof base.targets === "undefined" ? [] : base.targets;
 
-
-this.removeTargetedItems = function(peons, gems, goldCoins, coins) {
-	for (var i = 0; i < peons.length; i++) {
-        var peonTarget = this.getPeonTargets(peons[i]);
-		if (peonTarget !== null) {
-			for (var j = 0; j < peonTarget.items.length; j++) {
-                var item = peonTarget.items[j];
-				if (item.type === "gem") {
-                    this.removeListOrTarget(gems, item, peonTarget.items);
-				} else if  (item.type === "gold-coin") {
-                    this.removeListOrTarget(goldCoins, item, peonTarget.items);
-				} else {
-                    this.removeListOrTarget(coins, item, peonTarget.items);
-				}
-			}
-		}
-	}	
-};
-
-this.removeListOrTarget = function(items, item, targets) {
-    var index = items.indexOf(item);
-    if (index < 0) {
-        targets.splice(targets.indexOf(item), 1);
-    } else {
-        items.splice(index, 1);
-    }
-};
-
-this.coordinatePeons = function(peons, gems, goldCoins, coins) {
-	for (var i = 0; i < peons.length; i++) {
-        var peonTargets = this.getPeonTargets(peons[i]);
-		if (peonTargets != null && peonTargets.items.length > 0) {
-			this.movePeonForwardTarget(peons[i], peonTargets);
-		} else {
-			peonTargets = this.findBestTargetForPeon(peons[i], gems, goldCoins, coins);
-			this.movePeonForwardTarget(peons[i], peonTargets);
-		} 
-	}	
-};
-
-this.getPeonTargets = function(peon) {
-    for (var i = 0; i < this.peonsTargets.length; i++) {
-        if (this.peonsTargets[i].id === peon.id) {
-            return this.peonsTargets;
+this.removeUsedItems = function() {
+    var i;
+    var index;
+    for (i = 0; i < items.length; i++) {
+        index = usedItems.indexOf(items[i].id); 
+        if (index != -1) {
+            items.splice(index, 1);
         }
     }
-    return null;
+    for (i = 0; i < gems.length; i++) {
+        index = usedItems.indexOf(gems[i].id); 
+        if (index != -1) {
+            gems.splice(index, 1);
+        }
+    }
+    for (i = 0; i < goldCoins.length; i++) {
+        index = usedItems.indexOf(goldCoins[i].id); 
+        if (index != -1) {
+            goldCoins.splice(index, 1);
+        }
+    }
+    for (i = 0; i < coins.length; i++) {
+        index = usedItems.indexOf(coins[i].id); 
+        if (index != -1) {
+            coins.splice(index, 1);
+        }
+    }
 };
 
-this.movePeonForwardTarget = function(peon, peonTargets) {
-	if (typeof peonTargets.items.length > 0) {
-		this.command(peon, 'move', peon.getNearest(peonTargets.items));
-        this.say(peon.getNearest(peonTargets.items).pos);
-	}
+this.getItem = function(peon) {
+    var biggest = peon.getNearest(gems);
+    if (biggest === null) {
+	    biggest = peon.getNearest(goldCoins);
+    }
+    if (biggest === null) {
+    	biggest = peon.getNearest(coins);
+   }
+   return biggest;
 };
 
-this.findBestTargetForPeon = function(peon, gems, goldCoins, coins) {
-	var biggestElement = this.getNearestBiggestElement(peon, gems, goldCoins, coins);
-	if (biggestElement !== null) {
-		var biggestElementDistance = peon.distance(biggestElement);
-		var choosenElements = [biggestElement];
-		var elementsBetweenPeonAndBiggestElement = null;
-		if (biggestElement.type === "gem") {
-			elementsBetweenPeonAndBiggestElement = this.getElementsInDistance(peon, goldCoins, biggestElementDistance);
-			if (elementsBetweenPeonAndBiggestElement.length < 2) {
-				elementsBetweenPeonAndBiggestElement = this.getElementsInDistance(peon, coins, biggestElementDistance);
-				if (this.getElementsPrice(elementsBetweenPeonAndBiggestElement) > 5) {
-					choosenElements = elementsBetweenPeonAndBiggestElement;
-				}
-			} else {
-				choosenElements = elementsBetweenPeonAndBiggestElement;
-			}
-		} else if (biggestElement.type === "gold-coin") {
-			elementsBetweenPeonAndBiggestElement = this.getElementsInDistance(peon, coins, biggestElementDistance);
-			if (this.getElementsPrice(elementsBetweenPeonAndBiggestElement) > 5) {
-					choosenElements = elementsBetweenPeonAndBiggestElement;
-				}
-			}
-        var peonTarget = {
+this.getItem2 = function(peon) {
+    var result = peon.getNearest(items);
+    items.splice(items.indexOf(result), 1);
+    return result;
+}
+
+this.getItem3 = function(peon) {
+    var result = peon.getNearest(items);
+    var a = items.length;
+    items.splice(items.indexOf(result), 1);
+    var i = 6;
+    var item = peon.getNearest(items);
+    while (i > 0 && item != null) {
+        item = peon.getNearest(items);
+        items.splice(items.indexOf(item), 1);
+        i--;
+    }
+    return result;
+}
+
+this.getItem4 = function(peon) {
+    var i;
+    var target = {
+        id : peon.id,
+        positions : []
+    };    
+    for(i = 0; i < targets.length; i++) {
+        if (peon.id === targets[i].id) {
+            target = targets[i];
+        }
+    }
+    if(target == null) {
+        target = {
             id : peon.id,
-            items : choosenElements     
+            positions : []
         };
-		this.peonsTargets.push(peonTarget);
-        return peonTarget;
-	}
+        
+    }
+    if (target.positions.length > 0) {
+        for (i = 0; i < target.positions.length; i++) {
+            if(target.positions[i] == peon.pos) {
+                target.positions[i].splice(i, 1);
+                break;
+            }
+        }
+    }
+    if (target.positions.length == 0) {
+        var i = 6;
+        var item = peon.getNearest(items);
+        while (i > 0 && item != null) {
+            target.positions.push(item);
+            usedItems.push(item.id);
+            item = peon.getNearest(items);
+            items.splice(items.indexOf(item), 1);
+            i--;
+        }
+    }
+    return peon.getNearest(target.positions);
+}
+
+this.movePeons = function() {
+    for (var i = 0; i < peons.length; i++) {
+        var peon = peons[i];
+        if(peon.targetPos === null || (peon.pos.x === peon.targetPos.x && peon.pos.y === peon.targetPos.y)) {
+            var item = this.getItem4(peon);
+            if (item !== null) {
+                base.command(peon, "move", item.pos);
+            }
+        }
+    }
 };
 
-this.getElementsPrice = function(items) {
-	var price = 0;
-	for (var i = 0; i < items.length; i++) {
-		price += items[i].bountyGold;
-	}
-	return price;
+this.buy = function() {
+    if (peons.length < 3) {
+            type = 'peon';
+        } else {
+            type = 'ogre';
+        }
+        if (base.gold >= base.buildables[type].goldCost) {
+         base.build(type);
+        }
 };
 
-this.getElementsInDistance = function(peon, items, distance) {
-	var result = [];
-	for (var i = 0; i < items.length; i++) {
-		if (peon.distance(items[i]) <= distance) {
-			result.push(items[i]);
-		}  
-	}
-	return result;
-};
-
-this.getNearestBiggestElement = function(peon, gems, goldCoins, coins) {
-	var biggest = this.getNearestForPeon(peon, gems);
-	if (biggest === null) {
-		biggest = this.getNearestForPeon(peon, goldCoins);
-	}
-	if (biggest === null) {
-		biggest = this.getNearestForPeon(peon, coins);
-	}
-	return biggest;
-};
-
-this.getNearestForPeon = function(peon, items) {
-	return peon.getNearest(items);
-};
-
-var base = this;
-
-/////// 1. Command peons to grab coins and gems. ///////
-// You can only command peons, not fighting units.
-// You win by gathering gold more efficiently to make a larger army.
-// Click on a unit to see its API.
-var items = base.getItems();
-var peons = base.getByType('peon');
-var gems = base.getByType('gems');
-var goldCoins = base.getByType('gold-coin');
-var coins = base.getByType('coin');
-this.peonsTargets = typeof this.peonsTargets == "undefined" ? [] : this.peonsTargets;
-
-this.removeTargetedItems(peons, gems, goldCoins, coins);
-this.coordinatePeons(peons, gems, goldCoins, coins);
-
-/////// 2. Decide which unit to build this frame. ///////
-// Peons can gather gold; other units auto-attack the enemy base.
-// You can only build one unit per frame, if you have enough gold.
-var type;
-if (peons.length < 3)
-    type = 'peon';
-else
-    type = 'ogre';
-if (base.gold >= base.buildables[type].goldCost)
-    base.build(type);
-
-
-
+this.removeUsedItems();
+this.buy();
+this.movePeons();
+base.usedItems = usedItems;
+base.targets = targets;

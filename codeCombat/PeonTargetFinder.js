@@ -17,7 +17,7 @@ var peonTargetFinder = {
             if (peonTarget.positions.length == 0) {
                 var item = this.getBiggestItem(this.map.peons[i]);
                 this.removeItem(item);
-                peonTarget.positions.push(item.pos);
+                peonTarget.positions.push(item);
             }
         }
     },
