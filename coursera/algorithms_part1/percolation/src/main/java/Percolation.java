@@ -1,26 +1,38 @@
-import java.lang.ArrayIndexOutOfBoundsException;
-import java.lang.IllegalArgumentException;
-import java.lang.Override;
+/**
+ * Percolation implementation.
+ *
+ * @author Zoltán Kornél Török
+ */
+public class Percolation {
 
-public class Percolation extends QuickFindUF {
-
+    private WeightedQuickUnionUF quickFindUF;
     private boolean[] isOpen;
     private int N;
-    // create N-by-N grid, with all sites blocked
-    public Percolation(int N) {
-        super(N);
+
+    /**
+     * .
+     *
+     * @param N N.
+     */
+    public Percolation(final int N) {
+        quickFindUF = new WeightedQuickUnionUF(N * N);
         if (N < 1) {
             throw new IllegalArgumentException();
         }
-        isOpen = new boolean[N*N];
+        isOpen = new boolean[N * N];
         this.N = N;
     }
 
-    // open site (row i, column j) if it is not open already
-    public void open(int i, int j) {
+    /**
+     * .
+     *
+     * @param i
+     * @param j
+     */
+    public void open(final int i, final int j) {
         checkInput(i, j);
         if (!isOpen(i, j)) {
-            isOpen[(i - 1) + (j - 1)] = true;
+            isOpen[((i - 1) * N) + (j - 1)] = true;
             unionNeighbour(i, j, i + 1, j);
             unionNeighbour(i, j, i - 1, j);
             unionNeighbour(i, j, i, j + 1);
@@ -28,45 +40,62 @@ public class Percolation extends QuickFindUF {
         }
     }
 
-    // is site (row i, column j) open?
-    public boolean isOpen(int i, int j) {
+    /**
+     * is site (row i, column j) open?
+     *
+     * @param i
+     * @param j
+     * @return
+     */
+    public boolean isOpen(final int i, final int j) {
         checkInput(i, j);
-        return isOpen[(i - 1) + (j - 1)];
+        return isOpen[((i - 1) * N) + (j - 1)];
     }
 
-    // is site (row i, column j) full?
-    public boolean isFull(int i, int j) {
+    /**
+     * is site (row i, column j) full?
+     *
+     * @param i
+     * @param j
+     * @return
+     */
+    public boolean isFull(final int i, final int j) {
         checkInput(i, j);
         boolean full = false;
         if (isOpen(i, j)) {
-            boolean[] openColumns = new boolean[N];
-            for (int row = 0; row < N - 1; row++) {
-                for (int column = 0; column < N - 1; column++) {
-                    if (connected((row + column), (i - 1) + (j - 1))) {
-                        openColumns [column] = true;
+            if (i - 1 != 0) {
+                for (int row = 0; row < N - 1; row++) {
+                    full = quickFindUF.connected(((i - 1) * N) + (j - 1), row);
+                    if (full) {
+                        break;
                     }
                 }
-            }
-            full = true;
-            for (int row = 0; row < openColumns.length; row++) {
-                if (!openColumns[row]) {
-                    full = false;
-                }
+            } else {
+                full = true;
             }
         }
         return full;
     }
 
-    // does the system percolate?
+    /**
+     * does the system percolate?
+     *
+     * @return
+     */
     public boolean percolates() {
         boolean percolate = false;
-        for (int row = 1; row < N; row++) {
-            for (int column = 1; column < N; column++) {
-                if (isOpen(row, column)) {
-                    percolate = isFull(row, column);
-                    if (percolate) {
-                        break;
+        for (int i = 1; i < N; i++) {
+            if (isOpen(N, i)) {
+                for (int j = 1; j < N; j++) {
+                    if (isOpen(1, j)) {
+                        percolate = quickFindUF.connected(N * (N - 1) + (i - 1), (j - 1));
+                        if (percolate) {
+                            break;
+                        }
                     }
+                }
+                if (percolate) {
+                    break;
                 }
             }
         }
@@ -79,15 +108,15 @@ public class Percolation extends QuickFindUF {
 
     }
 
-    private void checkInput(int i, int j) {
+    private void checkInput(final int i, final int j) {
         if (i < 1 || j < 1 || i > N || j > N) {
             throw new ArrayIndexOutOfBoundsException();
         }
     }
 
-    private void unionNeighbour(int i, int j, int i2, int j2) {
-        if (i2 > 0 && i2 < N && j2 < N && j2 > 0 && isOpen(i2, j2)) {
-            union((i - 1) + (j - 1), i2 + (j2 - 1));
+    private void unionNeighbour(final int i, final int j, final int i2, final int j2) {
+        if (i2 > 0 && i2 <= N && j2 <= N && j2 > 0 && isOpen(i2, j2)) {
+            quickFindUF.union(((i - 1) * N) + (j - 1), ((i2 - 1) * N) + (j2 - 1));
         }
     }
 }
