@@ -7,5 +7,7 @@
 meteor-platform
 insecure
 accounts-password
-accounts-ui
 email
+ian:accounts-ui-bootstrap-3
+ian:bootstrap-3-theme
+twbs:bootstrap

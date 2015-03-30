@@ -5,8 +5,11 @@ Accounts.config({
 
 
 Meteor.startup(function () {
-  Accounts.createUser({
-    "username" : "taz",
-    "email" : "taz19880922@gmail.com"
-  });
+  var user = Meteor.users.findOne({"username" : "taz"});
+  if (typeof user === "undefined") {
+    Accounts.createUser({
+      "username" : "taz",
+      "email" : "taz19880922@gmail.com"
+    });
+  }
 });
