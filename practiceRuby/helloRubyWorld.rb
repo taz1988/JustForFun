@@ -49,3 +49,37 @@ end
 
 veryFirst = MyFirstClassInRuby.new("so this is a name")
 veryFirst.myFirstClassFunction
+
+#variable types in Ruby
+
+#global variables starts with $ and should init with value or nil
+$invalidGlobalVariable # this will throw a warning
+$validNilGlobalVariable = nil
+$validGlobalVariable = 0
+
+# Instance variables
+class PracticeVariables
+    @instanceVariable = 1
+    @@classVariable = nil
+    CONSTANT = 10 
+end
+
+x = 1;
+
+if x == 1
+    print "first"
+elsif x == 2
+    print "second"
+else
+    print "something"
+end
+
+x = 1;
+while x != 11 do
+    puts "while cycle #{x}"
+    x+= 1
+end
+
+for i in 1..10 do
+    puts "for cycle #{i}"
+end
