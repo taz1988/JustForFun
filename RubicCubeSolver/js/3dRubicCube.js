@@ -1,3 +1,5 @@
+requirejs(["jquery", "three"], function() {
+
  var scene, camera, renderer;
     var geometry, material, mesh;
 
@@ -37,3 +39,4 @@
         init();
         animate();
     });
+});
