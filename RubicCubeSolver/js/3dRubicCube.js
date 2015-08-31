@@ -1,4 +1,4 @@
-requirejs(["jquery", "three"], function() {
+define(["jquery", "three"], function() {
 
     var scene, camera, renderer;
        var geometry, material, mesh;
