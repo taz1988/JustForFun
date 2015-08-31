@@ -1,10 +1,24 @@
 requirejs(["jquery", "three"], function() {
 
- var scene, camera, renderer;
-    var geometry, material, mesh;
+    var scene, camera, renderer;
+       var geometry, material, mesh;
+
+    function animate() {
+
+        requestAnimationFrame( animate );
+
+        mesh.rotation.x += 0.01;
+        mesh.rotation.y += 0.02;
+
+        renderer.render( scene, camera );
+
+    }
+
+    return {
 
 
-    function init() {
+
+        init : function() {
 
         scene = new THREE.Scene();
 
@@ -18,25 +32,11 @@ requirejs(["jquery", "three"], function() {
         scene.add( mesh );
 
         renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setSize( window.innerWidth / 2, window.innerHeight / 2);
 
         document.body.appendChild(renderer.domElement);
-
-    }
-
-    function animate() {
-
-        requestAnimationFrame( animate );
-
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
-
-        renderer.render( scene, camera );
-
-    }
-
-    jQuery(document).ready(function() {
-        init();
         animate();
-    });
+    }
+
+    };
 });
