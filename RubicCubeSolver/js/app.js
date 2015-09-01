@@ -6,7 +6,7 @@ requirejs.config({
     }
 });
 
-define(["jquery", "3dRubicCube"], function(jQuery, RubicCube3d) {
+define(["jquery", "3dRubicCube/3dRubicCube"], function(jQuery, RubicCube3d) {
     jQuery(document).ready(function(){
         RubicCube3d.init();
     });
