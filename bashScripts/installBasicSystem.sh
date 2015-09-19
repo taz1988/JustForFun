@@ -14,6 +14,13 @@ install qbittorrent
 install remmina
 install remmina-plugins-rdp
 install calibre
+install pidgin
+install docker
+install docker-compose
+install ant
+install ant-junit
+install tomcat
+install anki
 
 ######## End of list #############
 
