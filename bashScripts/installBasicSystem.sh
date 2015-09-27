@@ -21,6 +21,7 @@ install ant
 install ant-junit
 install tomcat
 install anki
+install lpf-skype
 
 ######## End of list #############
 
