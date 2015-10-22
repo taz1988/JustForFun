@@ -1,1 +1,7 @@
 *.swp
+*.class
+*.jar
+*.war
+/target
+target
+target/*
