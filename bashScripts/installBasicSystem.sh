@@ -22,6 +22,11 @@ install ant-junit
 install tomcat
 install anki
 install lpf-skype
-
+install mc
+install maven
+install gnome-subtitles
+install samba
+install system-config-samba
+install htop
 ######## End of list #############
 
