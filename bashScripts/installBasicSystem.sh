@@ -28,5 +28,9 @@ install gnome-subtitles
 install samba
 install system-config-samba
 install htop
+install alien
+install rpmrebuild
+### games ###
+install trophy
 ######## End of list #############
 
