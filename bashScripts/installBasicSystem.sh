@@ -3,7 +3,7 @@
 
 
 function install {
-  dnf -y install $1
+  apt -y install $1
 }
 
 ######## List of packages, what I want to install for my system ########
@@ -30,6 +30,13 @@ install system-config-samba
 install htop
 install alien
 install rpmrebuild
+install vim
+install subscene
+install workrave
+### utilities###
+install unrar
+### reaqders ###
+install chmsee
 ### games ###
 install trophy
 ######## End of list #############

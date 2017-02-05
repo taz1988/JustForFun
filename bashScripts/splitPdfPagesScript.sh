@@ -48,3 +48,4 @@ read name
 convert tmpImages/*.jpg $name
 echo "Finish import."
 echo 'finnished to split document.'
+rm -r tmpImages
